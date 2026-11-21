@@ -449,7 +449,7 @@
 
          <h1>
            BUILT FOR<br>
-           THE <span>RELENTLESS.</span>
+           THE <span>RUTHLESS.</span>
          </h1>
 
          <p>
@@ -491,6 +491,12 @@
        </div>
 
      </section>
+
+     <div class="brand-character">
+       <img src="images/branding/ruthless-syndicate-character.webp"
+            alt="Ruthless Syndicate’s illustrated fighter in a green flat cap and torn white shirt"
+            width="1100" height="733" loading="lazy" decoding="async">
+     </div>
 
      <section class="feature">
 

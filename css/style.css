@@ -327,6 +327,20 @@ button:disabled {
     width: 100%;
 }
 
+/* Homepage brand artwork */
+.brand-character {
+    padding: clamp(20px, 4vw, 48px) 18px;
+    background: #111114;
+    border-top: 1px solid var(--line);
+}
+
+.brand-character img {
+    display: block;
+    width: min(100%, 550px);
+    height: auto;
+    margin-inline: auto;
+}
+
 /* ==================================================
    BRAND VALUES BAR
    ================================================== */
