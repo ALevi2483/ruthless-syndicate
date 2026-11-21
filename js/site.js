@@ -259,7 +259,8 @@
            ['athletes', 'Team Ruthless'],
            ['events', 'Fight Central'],
            ['about', 'Our story'],
-           ['sponsorship', 'Sponsorship']
+           ['sponsorship', 'Sponsorship'],
+           ['lorenzo-hunt-signing', 'Latest signing']
          ].map(([id, n]) => link(id, n)).join('')}
        </div>
 
@@ -419,6 +420,20 @@
    </section>
  `;
 
+ const huntSigning = `
+   <section class="signing-feature" aria-labelledby="latest-signing">
+     <div class="section">
+       <p class="eyebrow">Latest signing</p>
+       <h2 id="latest-signing">Lorenzo “The Juggernaut” Hunt</h2>
+       <p>The professional bare-knuckle boxer joins Team Ruthless.</p>
+       <div class="actions">
+         ${btn('lorenzo-hunt-signing', 'Read the announcement')}
+         ${btn('lorenzo-hunt', 'Meet Lorenzo Hunt', true)}
+       </div>
+     </div>
+   </section>
+ `;
+
  /* HOMEPAGE */
 
  function home() {
@@ -453,6 +468,8 @@
        </div>
 
      </section>
+
+     ${huntSigning}
 
      <div class="ticker">
        <span>LOYALTY</span>
@@ -1062,7 +1079,7 @@
        'The athletes featured by the brand, across combat sports and basketball.'
      ) +
 
-     `<section class="section">
+     huntSigning + `<section class="section">
 
        <div class="grid three">
 
@@ -1322,7 +1339,8 @@
          </article>
          <article class="card card-body">
            <h2>Athlete collaborations</h2>
-           <p>Explore Team Ruthless and the Steven “Ninja” Nguyen apparel edition.</p>
+           <p>Explore Team Ruthless, the signing of Lorenzo “The Juggernaut” Hunt, and the Steven “Ninja” Nguyen apparel edition.</p>
+           <p><a class="textlink" href="lorenzo-hunt.html#hunt-inquiries">Inquire about Lorenzo Hunt ↗</a></p>
            <div class="actions">
              ${btn('athletes', 'Meet the athletes', true)}
              ${btn('collections', 'Browse athlete editions', true)}
@@ -1635,6 +1653,10 @@
  } else if (page === 'athletes') {
 
    athletes();
+
+ } else if (page === 'lorenzo-hunt' || page === 'lorenzo-hunt-signing') {
+
+   // The athlete profile and announcement have static content.
 
  } else if (athleteBy(page)) {
 

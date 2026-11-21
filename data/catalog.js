@@ -266,6 +266,12 @@ window.RS_DATA = {
   ],
   "athletes": [
     {
+      "id": "lorenzo-hunt",
+      "name": "Lorenzo “The Juggernaut” Hunt",
+      "sport": "Bare-knuckle boxing",
+      "alias": "JUGGERNAUT"
+    },
+    {
       "id": "steven-nguyen",
       "name": "Steven “Ninja” Nguyen",
       "sport": "MMA",
