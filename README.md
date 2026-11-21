@@ -21,9 +21,9 @@ The draft supports catalog search and sorting, product details, a local-storage 
 
 ## Sources and launch checklist
 
-- The catalog retains four legacy [official store listing URLs](https://www.ruthlesssyndicate.com/). Confirm each listing, description, price, size, availability and purchase link against the merchant store before publishing. Obtain authorized photos for the Black Loyalty Tee, Black Loyalty Hoodie, Black Loyalty Snapback and Steven “Ninja” Nguyen Crop Tee. The current catalog uses vector illustrations.
-- The checked-in Combat Zone 92 poster lists Ruthless Syndicate as a sponsor and shows May 16, SNHU Arena in Manchester, NH, doors at 4 p.m. and fights at 5 p.m. The year comes from the draft event record. Confirm the archive entry with the [promoter](https://czmma.com/) and verify any additional event or partnership before adding it.
-- Confirm the existing [brand Instagram link](https://www.instagram.com/ruthlesssyndicate/) and contact address, and supply the official Facebook and YouTube URLs and each athlete's public profile URLs. Confirm the current roster, athlete biographies and leadership roles with the brand.
+- The catalog uses 12 product listings from the [official storefront](https://www.ruthlesssyndicate.com/mens-clothing.html). Prices, size ranges and sold-out labels are snapshots. Each product links to its listing for current availability, photos and purchase. The draft uses illustrations until reuse rights are confirmed for all 12 store product photos.
+- The [official sponsorship announcement](https://www.ruthlesssyndicate.com/sponsored-events.html) confirms the Combat Zone 92 date and the 2026 SNHU Arena platinum sponsorship. The [promoter schedule](https://czmma.com/events) lists Combat Zone 94 and identifies Combat Zone 95 as upcoming with its date to be announced.
+- The [brand website](https://www.ruthlesssyndicate.com/) identifies the Facebook, Instagram and YouTube accounts and leadership team. The [sponsored athlete page](https://www.ruthlesssyndicate.com/sponsored-athletes.html) supports the profile biographies. Supply confirmed individual profile URLs to add athlete social links.
 - Obtain the authorized logo, a Kai Lau Quan portrait, and headshots for Phil Martin, Eric Reid, Ron Martin and Kenny French. Confirm rights for the existing hero, fight-night photograph, event poster and four athlete portraits, and confirm the identities of the people in the uncaptioned hero and fight-night photographs.
 
 ## Before going live

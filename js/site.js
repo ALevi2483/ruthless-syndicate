@@ -208,6 +208,8 @@
  matchMedia('(max-width: 960px)').addEventListener('change', () => setMenu(false));
 
  const socialIcons = {
+   Facebook: '<path d="M14 21v-8h3l.5-3H14V8c0-1 .4-2 2-2h2V3h-3c-2.5 0-4 1.5-4 4v3H8v3h3v8z" fill="currentColor" stroke="none"/>',
+   YouTube: '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none"/>',
    Instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>',
    Email: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>'
  };
@@ -215,7 +217,9 @@
  const socialLinks = () => `
    <ul class="social-links">
      ${[
+       ['Facebook', D.social.facebook],
        ['Instagram', D.social.instagram],
+       ['YouTube', D.social.youtube],
        ['Email', `mailto:${D.contact}`]
      ].filter(([, url]) => url).map(([label, url]) => `
        <li><a href="${esc(url)}">
@@ -466,7 +470,7 @@
        )}
 
        <div class="grid">
-         ${D.products.map(prod).join('')}
+         ${D.products.slice(0, 4).map(prod).join('')}
        </div>
 
      </section>
@@ -523,7 +527,7 @@
 
      <section class="section follow-section" aria-labelledby="follow-heading">
        <h2 id="follow-heading">Follow the Syndicate</h2>
-       <p>Find Ruthless Syndicate on Instagram or reach out by email.</p>
+       <p>Follow the brand for apparel releases, athlete news, and event announcements.</p>
        ${socialLinks()}
      </section>
 
@@ -702,7 +706,7 @@
 
            <form id="add-form">
 
-             <label for="size">Size (sample options)</label>
+             <label for="size">Size (as listed by the store)</label>
 
              <select id="size" required>
                ${p.sizes.map(s => `
@@ -743,7 +747,7 @@
               href="${esc(p.source)}"
               target="_blank"
               rel="noopener">
-             Check price and availability at the official store ↗
+             See photos, current availability, and purchase options ↗
            </a>
 
            ${p.athlete
@@ -1132,7 +1136,7 @@
 
    const today = new Date().toISOString().slice(0, 10);
 
-   const sort = (a, b) => a.date.localeCompare(b.date);
+   const sort = (a, b) => (a.date ?? '9999').localeCompare(b.date ?? '9999');
 
    const cards = list => list.length
 
@@ -1144,7 +1148,7 @@
            ? photo(e.image, e.title, '', 'event-photo')
            : ''}
 
-         <time class="eyebrow" datetime="${esc(e.date)}">
+         ${e.date ? `<time class="eyebrow" datetime="${esc(e.date)}">
 
            ${esc(
              new Date(e.date + 'T12:00:00Z')
@@ -1154,7 +1158,7 @@
                })
            )}
 
-         </time>
+         </time>` : '<p class="eyebrow">Date to be announced</p>'}
 
          <h3>${esc(e.title)}</h3>
 
@@ -1193,7 +1197,7 @@
 
        ${cards(
          D.events
-           .filter(e => e.date >= today)
+           .filter(e => !e.date || e.date >= today)
            .sort(sort)
        )}
 
@@ -1203,7 +1207,7 @@
 
          ${cards(
            D.events
-             .filter(e => e.date < today)
+             .filter(e => e.date && e.date < today)
              .sort((a, b) => sort(b, a))
          )}
 
@@ -1252,7 +1256,7 @@
 
        <div class="grid">
 
-         ${D.leadership.map(({name, role, image}) => `
+         ${D.leadership.map(({name, role, bio, image}) => `
 
            <article class="card">
 
@@ -1280,6 +1284,7 @@
                <p class="muted small">
                  ${esc(role)}
                </p>
+               <p>${esc(bio)}</p>
 
              </div>
 
@@ -1310,8 +1315,9 @@
 
        <div class="grid partnership-grid">
          <article class="card card-body">
-           <h2>Combat Zone 92</h2>
-           <p>Ruthless Syndicate is listed as a sponsor on the event poster.</p>
+           <h2>Combat Zone MMA</h2>
+           <p>Ruthless Syndicate announced a platinum sponsorship for Combat Zone’s 2026 season at SNHU Arena in Manchester, New Hampshire.</p>
+           <p><a class="textlink" href="${esc(D.sponsorshipSource)}">Read the sponsorship announcement ↗</a></p>
            ${btn('events', 'Explore Fight Central', true)}
          </article>
          <article class="card card-body">
