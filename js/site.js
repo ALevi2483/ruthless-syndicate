@@ -39,19 +39,19 @@
 
  const photo = (src, alt, fallback = '', className = '') =>
    `<img src="${esc(src || fallback)}"
-      alt="${esc(alt)}"
+      alt="${esc(src ? alt : fallback ? 'Illustrative placeholder' : '')}"
       class="${esc(className)}"
       ${fallback
         ? `data-fallback="${esc(fallback)}" data-fallback-alt="Illustrative placeholder"`
         : 'data-optional-photo'}
-      loading="lazy">`;
+      loading="lazy" decoding="async">`;
 
  const productPhoto = p =>
    photo(p.image, p.name, `assets/${p.kind}.svg`);
 
  const portrait = (a, large = false) =>
    `<div class="athlete-art${large ? ' portrait-large' : ''}">
-      ${photo(a.image, a.name, '', 'portrait-photo')}
+      ${a.image ? photo(a.image, '', '', 'portrait-photo') : ''}
       <small>${esc(a.sport.toUpperCase())} / TEAM RS</small>
       <strong>${esc(a.alias)}</strong>
     </div>`;
@@ -77,7 +77,7 @@
  const brand =
    `<a class="brand" href="index.html"
       aria-label="Ruthless Syndicate home">
-      ${photo(D.logo, 'Ruthless Syndicate logo', 'assets/mark.svg', 'brand-logo')}
+      <img src="assets/mark.svg" alt="" width="45" height="45">
       <span>RUTHLESS<small>SYNDICATE</small></span>
     </a>`;
 
@@ -157,10 +157,10 @@
 
        ${[
          ['shop', 'Shop'],
-         ['collections', 'Collections'],
          ['athletes', 'Team Ruthless'],
          ['events', 'Fight Central'],
-         ['about', 'Our story']
+         ['about', 'Meet the Syndicate'],
+         ['sponsorship', 'Sponsorships']
        ].map(([id, n]) => link(id, n)).join('')}
 
      </nav>
@@ -169,7 +169,7 @@
              id="menu"
              aria-controls="navigation"
              aria-expanded="false">
-       MENU
+       Menu
      </button>
 
      <a class="bag" href="cart.html">
@@ -183,10 +183,49 @@
    </nav>
  `;
 
- $('#menu').addEventListener('click', () => {
-   const open = $('#navigation').classList.toggle('open');
-   $('#menu').setAttribute('aria-expanded', String(open));
+ const menu = $('#menu');
+ const navigation = $('#navigation');
+
+ function setMenu(open) {
+   navigation.classList.toggle('open', open);
+   menu.setAttribute('aria-expanded', String(open));
+ }
+
+ menu.addEventListener('click', () => {
+   setMenu(menu.getAttribute('aria-expanded') === 'false');
+   if (menu.getAttribute('aria-expanded') === 'true') {
+     navigation.querySelector('a').focus();
+   }
  });
+
+ $('#header').addEventListener('keydown', event => {
+   if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') {
+     setMenu(false);
+     menu.focus();
+   }
+ });
+
+ matchMedia('(max-width: 960px)').addEventListener('change', () => setMenu(false));
+
+ const socialIcons = {
+   Instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>',
+   Email: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>'
+ };
+
+ const socialLinks = () => `
+   <ul class="social-links">
+     ${[
+       ['Instagram', D.social.instagram],
+       ['Email', `mailto:${D.contact}`]
+     ].filter(([, url]) => url).map(([label, url]) => `
+       <li><a href="${esc(url)}">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" aria-hidden="true" focusable="false">
+           ${socialIcons[label]}
+         </svg>
+         ${label}
+       </a></li>`).join('')}
+   </ul>`;
 
  /* FOOTER */
 
@@ -241,11 +280,7 @@
            Original website ↗
          </a>
 
-         <a href="${esc(D.social)}"
-            target="_blank"
-            rel="noopener">
-           Instagram ↗
-         </a>
+         ${socialLinks()}
 
          ${link('privacy', 'Privacy')}
          ${link('terms', 'Terms')}
@@ -322,7 +357,7 @@
          ${esc(p.color)} ·
          ${p.status === 'soldout'
            ? 'Sold out on source'
-           : 'Demo listing'}
+           : 'Catalog preview'}
        </div>
 
        <div class="product-foot">
@@ -453,17 +488,15 @@
          </h2>
 
          <p class="muted">
-           The 2026 Combat Zone sponsorship brings
-           Ruthless Syndicate into the fight community.
-           Explore the event archive and discover the
-           people behind the brand.
+           Explore the Combat Zone 92 sponsorship in Fight Central
+           and meet the athletes featured by Ruthless Syndicate.
          </p>
 
          <div class="actions">
 
            ${btn('events', 'Fight central')}
 
-           ${btn('about', 'Our story', true)}
+           ${btn('sponsorship', 'Sponsorships', true)}
 
          </div>
 
@@ -487,6 +520,12 @@
      </section>
 
      ${community}
+
+     <section class="section follow-section" aria-labelledby="follow-heading">
+       <h2 id="follow-heading">Follow the Syndicate</h2>
+       <p>Find Ruthless Syndicate on Instagram or reach out by email.</p>
+       ${socialLinks()}
+     </section>
 
    `;
  }
@@ -547,9 +586,7 @@
 
        </div>
 
-       <div id="result-count"
-            class="muted small"
-            aria-live="polite">
+       <div id="result-count" class="muted small" role="status">
        </div>
 
        <div id="products"
@@ -661,11 +698,7 @@
 
            <div class="price">${money(p.price)}</div>
 
-           <p class="muted">
-             ${esc(p.color)} apparel from the Ruthless
-             Syndicate catalog. Product details and images
-             require merchant approval.
-           </p>
+           <p class="muted">${esc(p.description)}</p>
 
            <form id="add-form">
 
@@ -710,7 +743,7 @@
               href="${esc(p.source)}"
               target="_blank"
               rel="noopener">
-             View original product listing ↗
+             Check price and availability at the official store ↗
            </a>
 
            ${p.athlete
@@ -1063,21 +1096,16 @@
 
            <div class="eyebrow">The athlete</div>
 
-           <h1>${esc(a.alias)}</h1>
+           <h2>${esc(a.alias)}</h2>
 
            <p>${esc(a.bio)}</p>
 
-           <p class="muted small">
-             Profile based on the original brand website.
-             Photography, social links and current fight
-             statistics require approval before launch.
-           </p>
 
            <div class="actions">
 
              ${btn('athletes', 'Back to roster', true)}
 
-             ${btn('collections', 'Athlete collections')}
+             ${gear.length ? '<a class="btn" href="#athlete-gear">Signature merchandise</a>' : ''}
 
            </div>
 
@@ -1087,27 +1115,12 @@
 
      </section>
 
-     <section class="section">
-
-       ${sectionTitle(
-         'Signature merchandise',
-         'Athlete collection'
-       )}
-
-       <div class="grid">
-
-         ${gear.length
-
-           ? gear.map(prod).join('')
-
-           : `<div class="empty">
-                No confirmed signature merchandise is
-                included in this demo for this athlete.
-              </div>`}
-
-       </div>
-
-     </section>
+     ${gear.length ? `
+       <section class="section" id="athlete-gear">
+         <h2>Signature merchandise</h2>
+         <div class="grid">${gear.map(prod).join('')}</div>
+       </section>
+     ` : ''}
 
      ${community}`;
 
@@ -1131,7 +1144,7 @@
            ? photo(e.image, e.title, '', 'event-photo')
            : ''}
 
-         <div class="eyebrow">
+         <time class="eyebrow" datetime="${esc(e.date)}">
 
            ${esc(
              new Date(e.date + 'T12:00:00Z')
@@ -1141,19 +1154,20 @@
                })
            )}
 
-         </div>
+         </time>
 
          <h3>${esc(e.title)}</h3>
 
          <div class="muted">${esc(e.location)}</div>
 
          <p>${esc(e.description)}</p>
+         ${e.doors && e.start ? `<p>Doors ${esc(e.doors)} · Fights ${esc(e.start)} (local time)</p>` : ''}
 
          <a class="textlink"
             href="${esc(e.source)}"
             target="_blank"
             rel="noopener">
-           Original announcement ↗
+           ${esc(e.sourceLabel)} ↗
          </a>
 
        </article>
@@ -1206,8 +1220,8 @@
    main.innerHTML =
 
      head(
-       'The Syndicate',
-       'Loyalty. Discipline. Ruthless pursuit.'
+       'Meet the Syndicate',
+       'The leadership and athletes behind Ruthless Syndicate.'
      ) +
 
      `<section class="section">
@@ -1225,8 +1239,7 @@
          </p>
 
          <p>
-           The concept places the athletes, merchandise
-           and community at the center of the digital experience.
+           <a class="textlink" href="athletes.html">Explore the athlete roster ↗</a>
          </p>
 
        </div>
@@ -1235,7 +1248,7 @@
 
      <section class="section">
 
-       ${sectionTitle('Leadership', 'Meet the team')}
+       <h2>Leadership</h2>
 
        <div class="grid">
 
@@ -1245,11 +1258,9 @@
 
              <div class="athlete-art">
 
-               ${photo(image, name, '', 'portrait-photo')}
+               ${image ? photo(image, '', '', 'portrait-photo') : ''}
 
-               <small>LEADERSHIP / RS</small>
-
-               <strong>
+               <strong aria-hidden="true">
 
                  ${esc(
                    name
@@ -1291,13 +1302,30 @@
    main.innerHTML =
 
      head(
-       'Become Ruthless',
-       'A preview of the athlete and brand partnership application experience.'
+       'Sponsorships & partnerships',
+       'Explore the brand’s involvement in combat sports and its athlete community.'
      ) +
 
      `<section class="section">
 
+       <div class="grid partnership-grid">
+         <article class="card card-body">
+           <h2>Combat Zone 92</h2>
+           <p>Ruthless Syndicate is listed as a sponsor on the event poster.</p>
+           ${btn('events', 'Explore Fight Central', true)}
+         </article>
+         <article class="card card-body">
+           <h2>Athlete collaborations</h2>
+           <p>Explore Team Ruthless and the Steven “Ninja” Nguyen apparel edition.</p>
+           <div class="actions">
+             ${btn('athletes', 'Meet the athletes', true)}
+             ${btn('collections', 'Browse athlete editions', true)}
+           </div>
+         </article>
+       </div>
+
        <div class="form">
+         <h2>Demo sponsorship application</h2>
 
          <div class="notice">
 
@@ -1438,6 +1466,8 @@
          </a>
 
        </p>
+
+       ${socialLinks()}
 
        <h2>Athlete partnerships</h2>
 
